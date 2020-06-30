@@ -1,4 +1,4 @@
-# Json-compiler
+# Json-from-default-schema
 
 Create json from a schema.
 
@@ -7,9 +7,9 @@ Create json from a schema.
 ```js
 const config = require('./config');
 const schema = require('./schema');
-const json_compiler = require('json-compiler');
+const json_from_schema = require('json-from-default-schema');
 
-const result_config = json_compiler(config, schema);
+const result_config = json_from_schema(config, schema);
 
 ```
 

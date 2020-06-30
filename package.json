@@ -1,5 +1,5 @@
 {
-    "name": "json-compiler",
+    "name": "json-from-default-schema",
     "version": "0.0.1",
     "description": "Create json from a schema.",
     "main": "index.js",
