@@ -26,6 +26,24 @@
                 },
                 "empty": {
                     "type": "integer"
+                },
+                "object": {
+                    "type": "object",
+                    "default": {},
+                    "properties": {
+                        "number": {
+                            "type": "number",
+                            "default": 14.3
+                        },
+                        "integer": {
+                            "type": "integer",
+                            "default": 17
+                        },
+                        "empty": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": []
                 }
             },
             "required": []

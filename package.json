@@ -1,11 +1,12 @@
 {
     "name": "json-from-default-schema",
-    "version": "0.0.1",
-    "description": "Create json from a schema.",
+    "version": "0.0.2",
+    "description": "Create json from schema and environment.",
     "main": "index.js",
     "scripts": {
         "test": "ts-node ./tests/test.ts",
-        "build": "tsc"
+        "build": "tsc",
+        "pub": "tsc && npm publish"
     },
     "repository": {
         "type": "git",
@@ -38,5 +39,8 @@
         "spec": [
             "tests/**/*.spec.js"
         ]
+    },
+    "dependencies": {
+        "@types/node": "^14.0.22"
     }
 }
