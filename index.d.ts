@@ -1,2 +1,2 @@
-declare const _default: (entity: any, schema: any, prefix?: string) => object;
+declare const _default: (entity: any, schema: any) => object;
 export default _default;
