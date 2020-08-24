@@ -8,12 +8,83 @@ export default (entity: any, schema: any): object => {
         throw new Error(`Schema must be json.`);
     }
 
-    entity = praseSchemaEntity(entity, schema);
+    entity = parseSchemaEntity(entity, schema);
 
     return entity;
 }
 
-const praseSchemaEntity = (entity: any, schema: any): object => {
+const parseKeyEntity = (entity_value: any, schema: any): any => {
+
+    if (schema.env !== undefined) {
+
+        const env_prefix_key = schema.env;
+
+        if (process.env[env_prefix_key] !== undefined) {
+
+            const env_key_value = process.env[env_prefix_key];
+
+            if (schema.type === "integer" || schema.type === "number") {
+                return parseFloat(env_key_value);
+            }
+
+            if (schema.type === "boolean") {
+                if (env_key_value === "true") {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (schema.type === "string") {
+                return env_key_value;
+            }
+
+            if (schema.type === "object") {
+                return JSON.parse(env_key_value);
+            }
+
+        }
+
+    }
+
+    if (schema.default !== undefined && entity_value === undefined) {
+        return schema.default;
+    }
+
+    return entity_value;
+
+}
+
+const parseSchemaEntity = (entity: any, schema: any): object => {
+
+    if (schema.type === 'object') {
+        
+        if (schema.properties !== undefined && typeof schema.properties === 'object' && !Array.isArray(schema.properties)) {
+
+            for (let key in schema.properties) {
+                const key_result = parseKeyEntity(entity[key], schema.properties[key]);
+                if (key_result !== undefined) {
+                    entity[key] = key_result;
+                    if (schema.properties[key].type === "object" && entity[key] !== undefined) {
+                        const object_result = parseSchemaEntity(entity[key], schema.properties[key]);
+                        if (object_result !== undefined) {
+                            entity[key] = object_result;
+                        }
+                    }
+                }
+                
+            }
+
+        }
+
+    }
+
+    return entity;
+
+}
+
+/*
+const parseSchemaEntity = (entity: any, schema: any): object => {
 
     if (schema.type === 'object') {
         
@@ -78,8 +149,9 @@ const praseSchemaEntity = (entity: any, schema: any): object => {
 
 }
 
-const parseEntityKey = (key_name: string, entity: any, schema: any): object  => {
 
+const parseEntityKey = (key_name: string, entity: any, schema: any): object  => {
+console.log("parseEntityKey");
     if (schema.type === 'object' && schema.properties !== undefined) {
 
         for (let key in schema.properties) {
@@ -87,7 +159,7 @@ const parseEntityKey = (key_name: string, entity: any, schema: any): object  => 
             if (entity[key_name][key] === undefined && schema.properties[key].env !== undefined) {
 
                 const env_prefix_key = schema.properties[key].env;
-
+console.log("env_prefix_key = ", env_prefix_key);
                 if (process.env[env_prefix_key] !== undefined) {
 
                     const env_key_value = process.env[env_prefix_key];
@@ -139,3 +211,4 @@ const parseEntityKey = (key_name: string, entity: any, schema: any): object  => 
 
     return entity;
 }
+*/
