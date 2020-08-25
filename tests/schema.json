@@ -18,6 +18,11 @@
             "type": "object",
             "default": {},
             "properties": {
+                "array": {
+                    "type": "array",
+                    "env": "OBJECT_ARRAY",
+                    "default": []
+                },
                 "number": {
                     "type": "number",
                     "default": 14.3

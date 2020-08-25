@@ -29,7 +29,7 @@ const parseKeyEntity = (entity_value, schema) => {
             if (schema.type === "string") {
                 return env_key_value;
             }
-            if (schema.type === "object") {
+            if (schema.type === "object" || schema.type === "array") {
                 return JSON.parse(env_key_value);
             }
         }
