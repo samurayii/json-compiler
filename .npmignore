@@ -1,6 +1,0 @@
-.gitignore
-.git
-.vscode
-node_modules
-tests
-index.ts

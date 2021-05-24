@@ -10,13 +10,13 @@
         "sourceMap": false,
         "baseUrl": ".",
         "declaration": true,
-        "removeComments": true,
+        "removeComments": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "outDir": "."
+        "outDir": "./dist"
     },
     "include": [
-        "./index.ts"
+        "./src/index.ts"
     ],
     "exclude": []
 }

@@ -1,4 +1,12 @@
-export default (entity: any, schema: any): object => {
+/**
+ * Create json from a schema.
+ * 
+ * @param {object} entity - source json object.
+ * @param {object} schema - json schema.
+ * @param {boolean} [env_flag=true] - Flag for parsing environment keys from "env" key.
+ * @return {object} result object
+*/
+export default (entity: any, schema: any, env_flag: boolean = true): object => {
 
     if (typeof entity !== 'object' || Array.isArray(entity)) {
         throw new Error(`Entity must be json object.`);
@@ -8,14 +16,14 @@ export default (entity: any, schema: any): object => {
         throw new Error(`Schema must be json.`);
     }
 
-    entity = parseSchemaEntity(entity, schema);
+    entity = parseSchemaEntity(entity, schema, env_flag);
 
     return entity;
 }
 
-const parseKeyEntity = (entity_value: any, schema: any): any => {
+const parseKeyEntity = (entity_value: any, schema: any, env_flag: boolean = true): any => {
 
-    if (schema.env !== undefined) {
+    if (schema.env !== undefined && env_flag === true) {
 
         const env_prefix_key = schema.env;
 
@@ -55,22 +63,30 @@ const parseKeyEntity = (entity_value: any, schema: any): any => {
 
 }
 
-const parseSchemaEntity = (entity: any, schema: any): object => {
+const parseSchemaEntity = (entity: any, schema: any, env_flag: boolean = true): object => {
 
     if (schema.type === 'object') {
         
         if (schema.properties !== undefined && typeof schema.properties === 'object' && !Array.isArray(schema.properties)) {
 
             for (let key in schema.properties) {
-                const key_result = parseKeyEntity(entity[key], schema.properties[key]);
+
+                const key_result = parseKeyEntity(entity[key], schema.properties[key], env_flag);
+
                 if (key_result !== undefined) {
+
                     entity[key] = key_result;
+
                     if (schema.properties[key].type === "object" && entity[key] !== undefined) {
-                        const object_result = parseSchemaEntity(entity[key], schema.properties[key]);
+
+                        const object_result = parseSchemaEntity(entity[key], schema.properties[key], env_flag);
+
                         if (object_result !== undefined) {
                             entity[key] = object_result;
                         }
+
                     }
+
                 }
                 
             }

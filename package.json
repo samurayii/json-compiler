@@ -1,12 +1,14 @@
 {
     "name": "json-from-default-schema",
-    "version": "0.1.4",
+    "version": "1.0.0",
     "description": "Create json from schema and environment.",
     "main": "index.js",
     "scripts": {
-        "test": "ts-node ./tests/test.ts",
-        "build": "tsc",
-        "pub": "tsc && npm publish"
+        "up": "ncu && ncu -u && rimraf ./package-lock.json && npm i && ncu",
+        "ncu": "ncu",
+        "pub": "npm run test && npm run build && npm publish ./dist && rimraf ./dist",
+        "test": "mocha -r ts-node/register --config ./tests/mocha.unit.config.json",
+        "build": "rimraf ./dist && tsc && json-key-remover && files-copier -e build"
     },
     "repository": {
         "type": "git",
@@ -14,6 +16,8 @@
     },
     "keywords": [
         "config",
+        "schema",
+        "env",
         "json"
     ],
     "author": "Nuzhnov A.A.",
@@ -23,24 +27,45 @@
     },
     "homepage": "https://github.com/samurayii/json-compiler#readme",
     "devDependencies": {
-        "ts-node": "^8.10.2",
-        "typescript": "^3.9.5"
+        "@types/chai": "^4.2.18",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "^15.6.0",
+        "chai": "^4.3.4",
+        "files-copier": "^0.1.1",
+        "json-key-remover": "^0.0.3",
+        "mocha": "^8.4.0",
+        "npm-check-updates": "^11.5.13",
+        "rimraf": "^3.0.2",
+        "ts-node": "^10.0.0",
+        "typescript": "^4.2.4"
     },
-    "mocha": {
-        "diff": true,
-        "extension": [
-            "js"
-        ],
-        "opts": false,
-        "reporter": "spec",
-        "slow": 75,
-        "timeout": 2000,
-        "ui": "bdd",
-        "spec": [
-            "tests/**/*.spec.js"
+    "copier": {
+        "build": {
+            "rewrite": true,
+            "copy": [
+                {
+                    "from": "./package-lock.json",
+                    "to": "./dist/package-lock.json"
+                },
+                {
+                    "from": "./README.md",
+                    "to": "./dist/README.md"
+                }
+            ]
+        }
+    },
+    "remover": {
+        "target": "./package.json",
+        "destination": "./dist/package.json",
+        "remove": [
+            "remover",
+            "devDependencies",
+            "main",
+            "scripts",
+            "keywords",
+            "homepage",
+            "bugs",
+            "copier"
         ]
-    },
-    "dependencies": {
-        "@types/node": "^14.0.22"
     }
 }
