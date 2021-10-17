@@ -51,6 +51,8 @@ const parseKeyEntity = (entity_value: any, schema: any, env_flag: boolean = true
                 return JSON.parse(env_key_value);
             }
 
+            return env_key_value;
+
         }
 
     }
